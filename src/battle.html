@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+//ターン数
+var turn=1;
+//溜めカウンター
+var powerCounter=0;
+//各プレイヤーの出した手
+var myArray=new Array();
+var cpuArray=new Array();
+//画像パスリスト
+var imgArray=["tame.PNG","kougeki.PNG","bougyo.PNG"];
+
+
+//溜めメソッド
+function tame(){
+	powerCounter++;
+	myArray[turn]="tame";
+	
+	//画像を表示
+	document.getElementById("myImg").src=imgArray[0];
+	
+}
+//攻撃メソッド
+function kougeki(){
+	if(powerCounter>=1) powerCounter--;
+	myArray[turn]="kougeki";
+	
+	//画像を格納
+	document.getElementById("myImg").src=imgArray[1];
+}
+//防御メソッド
+function bougyo(){
+	myArray[turn]="bougyo";
+	
+	//画像を格納
+	document.getElementById("myImg").src=imgArray[2];
+}
+
+
+
+//相手の出す手の処理
+function cpuMeans(){
+	//相手の出す手の処理
+	var tame=document.getElementById("tameButton");
+	tame.addEventListener("click",judeg);
+	
+	//相手の出す手の処理
+	var tame=document.getElementById("kougekiButton");
+	tame.addEventListener("click",judeg);
+	
+	//相手の出す手の処理
+	var tame=document.getElementById("bougyoButton");
+	tame.addEventListener("click",judeg);
+	
+	
+	
+}
+
+//判定メソッド
+function judeg( ){
+	//ランダム数を作成
+	var randomNum=Math.floor(Math.random()*3);
+	if(randomNum==0){
+		cpuArray[turn]="tame";
+	}else if(randomNum==1){
+		cpuArray[turn]="kougeki";
+	}else if(randomNum==2){
+		cpuArray[turn]="bougyo";
+	}
+	//画像を表示
+	document.getElementById("cpuImg").src=imgArray[randomNum];
+	
+	//各プレイヤーの出した手を取得
+	var mySelectHand=myArray[turn];
+	var cpuSelectHand=cpuArray[turn];
+	if(mySelectHand=="kougeki"&&cpuSelectHand=="tame"){
+		//youWin
+		var myResult=document.getElementById("myResult");
+		document.getElementById("myResult").innerHTML="WIN!!!";
+		var cpuResult=document.getElementById("cpuResult");
+		document.getElementById("cpuResult").innerHTML="LOSE";
+		turn=1;
+	}else if(mySelectHand=="tame"&&cpuSelectHand=="kougeki"){
+		//youLose
+		var myResult=document.getElementById("myResult");
+		document.getElementById("myResult").innerHTML = "LOSE";
+		var cpuResult=document.getElementById("cpuResult");
+		document.getElementById("cpuResult").innerHTML="WIN!!!";
+		turn=1;
+	}else{
+		//ドロー
+		turn++;
+	}
+	
+}
+
+</script>
+<style>
+#cpuField{
+width:620px;
+height:240px;
+border:solid 1px;
+}
+#myField{
+width:620px;
+height:240px;
+border:solid 1px;
+}
+#tameButton{
+width:200px;
+height:50px;
+}
+#kougekiButton{
+width:200px;
+height:50px;
+}
+#bougyoButton{	
+width:200px;
+height:50px;
+}
+
+#myResult {
+	font-size: 42pt;
+}
+#cpuResult {
+	font-size: 42pt;
+}
+</style>
+<body onLoad="cpuMeans()">
+<div id="cpuField"><img src="" width="" height="" alt="cpuの一手" id="cpuImg">
+<span id="cpuResult" ></span></div><br>
+<div id="myField"><img src="" width="" height="" alt="あなたの一手" id="myImg">
+<span id="myResult" ></span></div>
+<br>
+<form id="means" >
+<span id="tame"><button type="button" id="tameButton" onclick="tame()">タメ</button></span>
+<span id="kougeki"><button type="button" id="kougekiButton" onclick="kougeki()">ブラックホール</button></span>
+<span id="bougyo"><button type="button" id="bougyoButton" onclick="bougyo()">バリア</button></span>
+</form>
+
+
+</body>
+</html>
